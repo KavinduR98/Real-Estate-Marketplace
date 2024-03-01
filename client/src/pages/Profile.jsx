@@ -147,6 +147,24 @@ export default function Profile() {
     }
   };
 
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -268,9 +286,10 @@ export default function Profile() {
               </Link>
 
               <div className='flex gap-4'>
-                <FaRegTrashCan  onClick={() => handleListingDelete(listing._id)} className="cursor-pointer text-red-500 h-5 w-5"/>  
+                <FaRegTrashCan onClick={() => handleListingDelete(listing._id)} className="cursor-pointer text-red-500 h-5 w-5" />
+
                 <Link to={`/update-listing/${listing._id}`}>
-                  <FaPenToSquare className="h-5 w-5 text-blue-500"/>
+                  <FaPenToSquare className="h-5 w-5 text-blue-500" />
                 </Link>
               </div>
             </div>
